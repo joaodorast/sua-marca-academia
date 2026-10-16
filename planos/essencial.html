@@ -35,7 +35,7 @@
           
         </div>
 
-        <div class="pl-card">
+        <div class="pl-card" data-plan-name="Essencial">
           <div class="period" role="radiogroup" aria-label="Período de contratação" data-period>
             <button type="button" role="radio" aria-checked="true" data-months="1" data-discount="0">Mensal</button>
             <button type="button" role="radio" aria-checked="false" data-months="6" data-discount="0.10">Semestral <small>−10%</small></button>
@@ -44,8 +44,11 @@
           </div>
           <p class="plan__price"><span class="plan__cur">R$</span><span class="plan__value" data-base="119">119</span><span class="plan__per">/mês</span></p>
           <p class="plan__total" data-total aria-live="polite">Sem fidelidade</p>
-          <a href="/#experimental" class="btn btn--red btn--lg">Começar com o Essencial</a>
-          <p class="pl-card__note">Valores demonstrativos. Ajuste conforme a política da academia.</p>
+          <button type="button" class="btn btn--red btn--lg pl-pay-btn" data-checkout>Assinar o Essencial
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg>
+          </button>
+          <a href="/#experimental" class="pl-trial">Prefiro agendar uma aula experimental</a>
+          <p class="pl-card__note">Valores demonstrativos. O pagamento é uma simulação.</p>
         </div>
       </div>
     </section>
@@ -98,6 +101,77 @@
       <p class="footer__copy">© <span data-year>2026</span> Sua Marca. Todos os direitos reservados.</p>
     </div>
   </footer>
+
+  <div class="pl-sticky" data-sticky>
+    <p><small>Essencial</small><strong data-sticky-price>R$ 119/mês</strong></p>
+    <button type="button" class="btn btn--red" data-checkout>Assinar</button>
+  </div>
+
+  <dialog class="pay" id="pay" aria-labelledby="pay-title">
+    <div class="pay__box">
+      <header class="pay__head">
+        <h2 id="pay-title">Finalizar assinatura</h2>
+        <button type="button" class="pay__close" data-pay-close aria-label="Fechar">×</button>
+      </header>
+      <p class="pay__demo"><b>Simulação.</b> Nenhum pagamento real é feito e nenhum dado é enviado ou salvo.</p>
+
+      <form class="pay__form" id="pay-form" novalidate>
+        <p class="pay__summary" data-pay-summary></p>
+
+        <fieldset class="pay__block">
+          <legend>1. Seus dados</legend>
+          <div class="field"><label for="p-nome">Nome completo</label><input id="p-nome" name="nome" type="text" autocomplete="name" required minlength="3"><p class="field__error" aria-live="polite"></p></div>
+          <div class="field"><label for="p-email">E-mail</label><input id="p-email" name="email" type="email" autocomplete="email" required><p class="field__error" aria-live="polite"></p></div>
+        </fieldset>
+
+        <fieldset class="pay__block">
+          <legend>2. Forma de pagamento</legend>
+          <div class="pay__tabs" role="tablist" aria-label="Forma de pagamento">
+            <button type="button" role="tab" aria-selected="true" data-method="pix">Pix</button>
+            <button type="button" role="tab" aria-selected="false" tabindex="-1" data-method="card">Cartão</button>
+            <button type="button" role="tab" aria-selected="false" tabindex="-1" data-method="boleto">Boleto</button>
+          </div>
+
+          <div class="pay__panel" data-panel="pix">
+            <div class="pay__qr" data-qr aria-label="QR Code de demonstração" role="img"></div>
+            <div class="pay__pix">
+              <p>Escaneie o QR Code ou copie o código Pix.</p>
+              <code data-pix>00020126SIMULACAO</code>
+              <button type="button" class="btn btn--ghost" data-copy>Copiar código</button>
+            </div>
+          </div>
+
+          <div class="pay__panel" data-panel="card" hidden>
+            <p class="pay__hint">Use qualquer número de teste, como 4242 4242 4242 4242.</p>
+            <div class="field"><label for="p-num">Número do cartão</label><input id="p-num" name="numero" type="text" inputmode="numeric" autocomplete="off" placeholder="0000 0000 0000 0000" data-card-field><p class="field__error" aria-live="polite"></p></div>
+            <div class="field"><label for="p-holder">Nome impresso</label><input id="p-holder" name="titular" type="text" autocomplete="off" data-card-field><p class="field__error" aria-live="polite"></p></div>
+            <div class="pay__row">
+              <div class="field"><label for="p-val">Validade</label><input id="p-val" name="validade" type="text" inputmode="numeric" autocomplete="off" placeholder="MM/AA" data-card-field><p class="field__error" aria-live="polite"></p></div>
+              <div class="field"><label for="p-cvv">CVV</label><input id="p-cvv" name="cvv" type="text" inputmode="numeric" autocomplete="off" placeholder="123" data-card-field><p class="field__error" aria-live="polite"></p></div>
+            </div>
+            <div class="field"><label for="p-parc">Parcelas</label><select id="p-parc" name="parcelas" data-parcelas></select></div>
+          </div>
+
+          <div class="pay__panel" data-panel="boleto" hidden>
+            <p>O boleto de demonstração vence em 3 dias. A confirmação leva até 2 dias úteis.</p>
+            <code data-boleto>00000.00000 00000.000000 00000.000000 0 00000000000000</code>
+            <button type="button" class="btn btn--ghost" data-copy-boleto>Copiar linha digitável</button>
+          </div>
+        </fieldset>
+
+        <button type="submit" class="btn btn--red btn--lg btn--block" data-pay-submit>Pagar (simulação)</button>
+      </form>
+
+      <div class="pay__done" data-pay-done hidden tabindex="-1">
+        <span class="pay__check" aria-hidden="true">✓</span>
+        <h3>Pagamento aprovado</h3>
+        <p data-done-text></p>
+        <p class="pay__proto">Protocolo <code data-proto></code></p>
+        <p class="pay__demo"><b>Simulação.</b> Nada foi cobrado.</p>
+        <div class="pay__actions"><a class="btn btn--red" href="/">Voltar ao site</a><button type="button" class="btn btn--ghost" data-pay-close>Fechar</button></div>
+      </div>
+    </div>
+  </dialog>
 
   <script src="/assets/js/plano.js" defer></script>
 </body>
