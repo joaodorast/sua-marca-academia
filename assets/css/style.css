@@ -489,7 +489,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .plan__list li::before { content: ""; width: 14px; height: 8px; margin-top: .45rem; border-left: 2px solid var(--red); border-bottom: 2px solid var(--red); transform: rotate(-45deg); }
 .plan__btn { margin-top: .6rem; }
 
-.plan--featured { background: var(--ink); color: var(--bone); margin-top: -2.2rem; padding-top: 4.6rem; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+.plan--featured { background: var(--ink); color: var(--bone); margin-top: -2px; padding-top: 4.6rem; }
 .plan--featured::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 6px; background: var(--red); }
 .plan--featured .plan__for, .plan--featured .plan__per, .plan--featured .plan__total { color: var(--ash); }
 .plan--featured .plan__list { border-color: var(--line-d); }
