@@ -7,6 +7,13 @@
   const $ = (s, c = document) => c.querySelector(s);
   const $$ = (s, c = document) => [...c.querySelectorAll(s)];
 
+  /* ---------- configuração (preencha com os dados reais) ----------
+     whatsapp: só dígitos com DDI+DDD, ex.: '5511999999999'
+     email: ex.: 'contato@suaacademia.com.br'
+     Com whatsapp preenchido, os formulários abrem uma conversa pronta (wa.me, grátis, sem API).
+     Sem whatsapp, mas com email, abrem o app de e-mail. Sem nenhum, só exibem a confirmação. */
+  const CONFIG = { whatsapp: '', email: '' };
+
   /* ---------- header + CTA flutuante ---------- */
   const header = $('[data-header]');
   const floatCta = $('[data-float]');
@@ -172,7 +179,19 @@
       if (firstBad) { firstBad.focus(); return; }
 
       const data = Object.fromEntries(new FormData(form));
-      // Integração: envie `data` para o seu backend, CRM ou API de WhatsApp aqui.
+      const isTrial = form.dataset.form === 'trial';
+      const lines = isTrial
+        ? ['Olá! Quero agendar uma aula experimental.', `Nome: ${data.nome}`, `WhatsApp: ${data.telefone}`, `Modalidade: ${data.modalidade}`, `Período: ${data.periodo}`, data.plano ? `Plano de interesse: ${data.plano}` : '']
+        : ['Olá! Vim pelo site.', `Nome: ${data.nome}`, `E-mail: ${data.email}`, `Assunto: ${data.assunto}`, `Mensagem: ${data.mensagem}`];
+      const body = lines.filter(Boolean).join('\n');
+      const subject = isTrial ? 'Aula experimental' : `Contato: ${data.assunto}`;
+      let target = '';
+      if (CONFIG.whatsapp) target = `https://wa.me/${CONFIG.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(body)}`;
+      else if (CONFIG.email) target = `mailto:${CONFIG.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      if (target) {
+        if (CONFIG.whatsapp) window.open(target, '_blank', 'noopener');
+        else window.location.href = target;
+      }
       const btn = $('button[type="submit"]', form);
       btn.disabled = true;
       const label = btn.firstChild.textContent;
